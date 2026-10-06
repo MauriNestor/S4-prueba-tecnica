@@ -85,6 +85,15 @@ class StudentControllerTest {
     }
 
     @Test
+    void sortingByUnknownFieldReturns400() throws Exception {
+        mvc.perform(get("/api/students").param("search", "ana").param("sort", "password,desc"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value(
+                        "Cannot sort by 'password'. Allowed fields: createdAt, firstName, lastName, studentCode, updatedAt"));
+        verifyNoInteractions(service);
+    }
+
+    @Test
     void duplicatedCodeReturns409() throws Exception {
         when(service.create(any())).thenThrow(new ConflictException("A student with code S-001 already exists"));
 
