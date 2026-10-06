@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: s4
+  config:
+    # Local runs read the repo-root .env (same file docker compose uses).
+    # In containers the file is absent and real environment variables are used.
+    import: optional:file:../.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:s4}
+    username: ${DB_USER:s4}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate   # schema is owned by Flyway migrations
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
+
+server:
+  error:
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
