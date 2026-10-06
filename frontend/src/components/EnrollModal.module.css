@@ -1,0 +1,22 @@
+.list {
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-lg);
+  overflow: hidden;
+}
+
+.row {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &[data-enrolled] {
+    background: var(--mantine-color-gray-0);
+  }
+}
+
+.footer {
+  border-top: 1px solid var(--mantine-color-gray-2);
+}

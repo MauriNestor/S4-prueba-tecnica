@@ -8,7 +8,7 @@ expuesta mediante una API REST y una interfaz web.
 
 ## Desarrollo local (estado actual)
 
-Requisitos: Java 21, Docker.
+Requisitos: Java 21, Node 20+, Docker.
 
 ```bash
 cp .env.example .env          # ajustar DB_PASSWORD
@@ -17,4 +17,17 @@ cd backend
 ./mvnw spring-boot:run       # lee ../.env automáticamente
 ```
 
-Pruebas: `cd backend && ./mvnw verify` (requiere Docker para Testcontainers).
+En otra terminal, el frontend (requiere Node 20+):
+
+```bash
+cd frontend
+npm install
+npm run dev                   # http://localhost:5173 (proxy de /api a :8080)
+```
+
+Pruebas:
+
+```bash
+cd backend && ./mvnw verify   # requiere Docker para Testcontainers
+cd frontend && npm test
+```

@@ -1,0 +1,54 @@
+.table {
+  thead {
+    background: var(--mantine-color-gray-0);
+  }
+
+  td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  td:first-child,
+  th:first-child {
+    padding-left: var(--mantine-spacing-xl);
+  }
+
+  td:last-child,
+  th:last-child {
+    padding-right: var(--mantine-spacing-xl);
+  }
+}
+
+.th {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-7);
+  white-space: nowrap;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.sortButton {
+  font: inherit;
+  color: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+
+  &[data-active] {
+    color: var(--mantine-color-indigo-7);
+  }
+
+  &:hover {
+    color: var(--mantine-color-gray-9);
+  }
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.description {
+  max-width: 420px;
+}
