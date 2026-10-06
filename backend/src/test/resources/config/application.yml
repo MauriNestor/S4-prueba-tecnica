@@ -1,0 +1,5 @@
+# Test-only overrides (config/ has higher precedence than the main application.yml).
+# Tests start from an empty schema so they control their own data.
+spring:
+  flyway:
+    locations: classpath:db/migration
