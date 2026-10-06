@@ -6,7 +6,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -47,10 +46,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem(HttpStatus.CONFLICT, "Conflict", "The operation conflicts with existing data");
     }
 
-    /** Raised when the client sorts by a field that does not exist. */
-    @ExceptionHandler(PropertyReferenceException.class)
-    ProblemDetail handleBadSortProperty(PropertyReferenceException ex) {
-        return problem(HttpStatus.BAD_REQUEST, "Invalid sort parameter", ex.getMessage());
+    @ExceptionHandler(BadRequestException.class)
+    ProblemDetail handleBadRequest(BadRequestException ex) {
+        return problem(HttpStatus.BAD_REQUEST, "Invalid request", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
