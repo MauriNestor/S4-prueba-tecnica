@@ -174,19 +174,6 @@ mapa `errors` con el mensaje de cada campo:
   "errors": { "studentCode": "studentCode is required" }
 }
 ```
-
-### Búsqueda, paginación y orden
-
-- `search`: busca el texto **en cualquier parte** del campo, sin distinguir mayúsculas de minúsculas.
-  - Estudiantes: código, nombre, apellido y nombre completo (`"ana pérez"` encuentra a Ana Pérez).
-  - Clases: código, título y descripción.
-  - Los caracteres `%` y `_` se buscan literalmente; no actúan como comodines.
-- `page` empieza en 0 y `size` es 20 por defecto, con un máximo de 100.
-- `sort=campo,asc|desc` solo acepta estos campos; cualquier otro devuelve 400:
-  - estudiantes: `studentCode`, `firstName`, `lastName`, `createdAt`, `updatedAt` (por defecto `lastName,firstName`);
-  - clases: `code`, `title`, `createdAt`, `updatedAt` (por defecto `code`).
-- Las listas paginadas responden con `{ content, page, size, totalElements, totalPages }`.
-
 ## Reglas de negocio
 
 - **Códigos únicos:** los códigos de estudiante y de clase se guardan sin espacios y en mayúsculas
@@ -253,17 +240,14 @@ La interfaz se diseñó primero en Google Stitch. Las pantallas de referencia y 
 
 ## Uso de IA
 
-Este proyecto se desarrolló con asistencia de herramientas de IA, permitida en la evaluación:
+Este proyecto se desarrolló con asistencia de herramientas de IA para ciertas fases:
 
 - **Claude (Anthropic), mediante Claude Code:**
-  - planificación por fases;
-  - generación de código del backend, del frontend y de las pruebas;
-  - configuración de Docker y CI;
-  - redacción de esta documentación.
+  - generación de código repetitivo del backend, del frontend y de las pruebas;
+  - Mejorar la redacción de esta documentación.
 - **Google Stitch:** generación de las pantallas de referencia y del sistema de diseño.
 
-Yo definí el alcance y las tecnologías, revisé cada fase antes de continuar y validé el resultado
-ejecutando la aplicación y las pruebas. Las decisiones técnicas y sus motivos están documentados en
+Yo definí el alcance, las tecnologías, arquitectura a seguir, toma de decisiones, uso de patrones de diseño. tambien revisé cada fase antes de continuar y validé el resultado ejecutando la aplicación y las pruebas. Las decisiones técnicas y sus motivos están documentados en
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Seguridad
