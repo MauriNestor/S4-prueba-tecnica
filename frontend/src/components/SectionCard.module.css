@@ -1,0 +1,5 @@
+.card {
+  border-color: var(--mantine-color-gray-2);
+  /* clips tables and full-width rows to the rounded corners */
+  overflow: hidden;
+}

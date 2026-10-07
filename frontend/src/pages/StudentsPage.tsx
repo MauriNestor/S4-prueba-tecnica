@@ -57,7 +57,7 @@ export function StudentsPage() {
         <SearchInput value={list.searchInput} onChange={list.setSearchInput} placeholder="Buscar por código, nombre o apellido…" />
       </SectionCard>
 
-      <SectionCard style={{ overflow: 'hidden', borderColor: 'var(--mantine-color-gray-2)' }}>
+      <SectionCard>
         {query.isError && !data ? (
           <ErrorState error={query.error} onRetry={() => query.refetch()} />
         ) : data && data.content.length === 0 ? (

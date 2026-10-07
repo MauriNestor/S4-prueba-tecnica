@@ -117,7 +117,7 @@ function StudentDetail({ id }: { id: number }) {
         )}
       </SectionCard>
 
-      <SectionCard style={{ overflow: 'hidden' }}>
+      <SectionCard>
         <Group justify="space-between" p="xl" pb="lg">
           <Group gap="xs">
             <Title order={3}>Clases inscritas</Title>

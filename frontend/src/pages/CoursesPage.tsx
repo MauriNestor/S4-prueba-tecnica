@@ -56,7 +56,7 @@ export function CoursesPage() {
         <SearchInput value={list.searchInput} onChange={list.setSearchInput} placeholder="Buscar por código, título o descripción…" />
       </SectionCard>
 
-      <SectionCard style={{ overflow: 'hidden' }}>
+      <SectionCard>
         {query.isError && !data ? (
           <ErrorState error={query.error} onRetry={() => query.refetch()} />
         ) : data && data.content.length === 0 ? (
