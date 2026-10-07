@@ -1,3 +1,4 @@
+# Full stack: docker compose up --build  ->  UI http://localhost:3000, API/Swagger http://localhost:8080
 services:
   db:
     image: postgres:16-alpine
@@ -14,6 +15,30 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432 # container port inside the compose network, not the host mapping
+      DB_NAME: ${DB_NAME:-s4}
+      DB_USER: ${DB_USER:-s4}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set (see .env.example)}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "${WEB_PORT:-3000}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   db-data:

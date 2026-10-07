@@ -6,7 +6,26 @@ expuesta mediante una API REST y una interfaz web.
 > En construcción. La documentación completa (instalación, endpoints, arquitectura
 > y decisiones técnicas) se completa al cerrar el proyecto.
 
-## Desarrollo local (estado actual)
+## Levantar todo con Docker
+
+Requisitos: Docker.
+
+```bash
+cp .env.example .env          # ajustar DB_PASSWORD
+docker compose up --build
+```
+
+| Servicio | URL |
+|---|---|
+| Interfaz web | http://localhost:3000 |
+| API REST | http://localhost:8080/api |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+
+La base se crea con las migraciones de Flyway e incluye datos de ejemplo.
+`docker compose down -v` borra el volumen para empezar de cero.
+Ejemplos de todos los endpoints en [`docs/api.http`](docs/api.http).
+
+## Desarrollo local (sin Docker para la app)
 
 Requisitos: Java 21, Node 20+, Docker.
 

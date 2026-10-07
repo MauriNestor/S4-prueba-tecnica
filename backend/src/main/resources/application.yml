@@ -23,6 +23,8 @@ spring:
         max-page-size: 100
 
 server:
+  # Behind the nginx proxy, honor X-Forwarded-* so generated URLs (Location) use the public address
+  forward-headers-strategy: framework
   error:
     include-stacktrace: never
 
