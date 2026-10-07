@@ -1,0 +1,180 @@
+# S4 API collection
+# Run with the "REST Client" extension for VS Code (humao.rest-client):
+# open this file and click "Send Request" above each block.
+# Requires the stack running (docker compose up --build). Requests are meant to be
+# run top to bottom: the ones in "Flow" reuse ids returned by earlier requests.
+# "Expect:" lines document the status code each request should return.
+
+@api = http://localhost:8080/api
+# Through the nginx proxy instead:  @api = http://localhost:3000/api
+
+############################################################
+# Students
+############################################################
+
+### List students (paged, default sort lastName,asc)
+# Expect: 200
+GET {{api}}/students
+
+### Search students: code, first name, last name or full name (case-insensitive, contains)
+# Expect: 200
+GET {{api}}/students?search=ana&page=0&size=5&sort=firstName,desc
+
+### Get one student (seed data: id 1 = S-0001 Ana Pérez)
+# Expect: 200
+GET {{api}}/students/1
+
+### Classes of a student
+# Expect: 200
+GET {{api}}/students/1/classes
+
+############################################################
+# Classes (named Course in code)
+############################################################
+
+### List classes (paged, default sort code,asc)
+# Expect: 200
+GET {{api}}/classes
+
+### Search classes: code, title or description
+# Expect: 200
+GET {{api}}/classes?search=datos
+
+### Get one class
+# Expect: 200
+GET {{api}}/classes/1
+
+### Students of a class (sorted by last name)
+# Expect: 200
+GET {{api}}/classes/1/students
+
+############################################################
+# Flow: create -> enroll -> query -> update -> unenroll -> delete
+############################################################
+
+### Create a student (code is stored upper-cased)
+# @name createStudent
+# Expect: 201
+POST {{api}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "demo-001",
+  "firstName": "Demo",
+  "lastName": "Estudiante"
+}
+
+### Create a class (description is optional)
+# @name createClass
+# Expect: 201
+POST {{api}}/classes
+Content-Type: application/json
+
+{
+  "code": "demo-101",
+  "title": "Clase de demostración",
+  "description": "Creada desde docs/api.http"
+}
+
+### Enroll the student in the class
+# Expect: 204
+PUT {{api}}/classes/{{createClass.response.body.id}}/students/{{createStudent.response.body.id}}
+
+### Enroll again: idempotent, still a single enrollment
+# Expect: 204
+PUT {{api}}/classes/{{createClass.response.body.id}}/students/{{createStudent.response.body.id}}
+
+### The class now lists the student
+# Expect: 200
+GET {{api}}/classes/{{createClass.response.body.id}}/students
+
+### The student now lists the class
+# Expect: 200
+GET {{api}}/students/{{createStudent.response.body.id}}/classes
+
+### Update the student (PUT replaces all fields)
+# Expect: 200
+PUT {{api}}/students/{{createStudent.response.body.id}}
+Content-Type: application/json
+
+{
+  "studentCode": "DEMO-001",
+  "firstName": "Demo",
+  "lastName": "Actualizado"
+}
+
+### Update the class
+# Expect: 200
+PUT {{api}}/classes/{{createClass.response.body.id}}
+Content-Type: application/json
+
+{
+  "code": "DEMO-101",
+  "title": "Clase de demostración (editada)",
+  "description": null
+}
+
+### Remove the enrollment
+# Expect: 204
+DELETE {{api}}/classes/{{createClass.response.body.id}}/students/{{createStudent.response.body.id}}
+
+### Remove it again: no longer enrolled
+# Expect: 404
+DELETE {{api}}/classes/{{createClass.response.body.id}}/students/{{createStudent.response.body.id}}
+
+### Delete the student (would also delete its enrollments)
+# Expect: 204
+DELETE {{api}}/students/{{createStudent.response.body.id}}
+
+### Delete the class
+# Expect: 204
+DELETE {{api}}/classes/{{createClass.response.body.id}}
+
+############################################################
+# Errors (RFC 7807 Problem Details)
+############################################################
+
+### Validation errors: 400 with an "errors" map (field -> message)
+# Expect: 400
+POST {{api}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "bad code!",
+  "firstName": "",
+  "lastName": null
+}
+
+### Malformed JSON
+# Expect: 400
+POST {{api}}/classes
+Content-Type: application/json
+
+{ "code": "X-1", 
+
+### Duplicated code (S-0001 exists in the seed data)
+# Expect: 409
+POST {{api}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "s-0001",
+  "firstName": "Otra",
+  "lastName": "Persona"
+}
+
+### Unknown student
+# Expect: 404
+GET {{api}}/students/999999
+
+### Enroll into an unknown class
+# Expect: 404
+PUT {{api}}/classes/999999/students/1
+
+### Non-numeric id
+# Expect: 400
+GET {{api}}/classes/abc
+
+### Sorting by a field that is not allowed
+# Expect: 400
+GET {{api}}/students?sort=password,desc
